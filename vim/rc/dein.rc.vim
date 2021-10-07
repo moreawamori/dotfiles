@@ -16,7 +16,7 @@ let g:dein#auto_recache = v:true
 let g:dein#lazy_rplugins = v:true
 let g:dein#install_progress_type = 'title'
 let g:dein#enable_notification = v:true
-let g:dein#notification_icon = '~/.vim/signs/warn.png'
+" let g:dein#notification_icon = '~/.vim/signs/warn.png'
 let g:dein#install_log_filename = '~/dein.log'
 
 let s:path = expand('~/.cache/dein')
