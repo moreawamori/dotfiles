@@ -1,0 +1,92 @@
+[[plugins]]
+repo = 'Shougo/ddc.vim'
+depends = ['context_filetype.vim', 'denops.vim']
+on_event = 'InsertEnter'
+hook_source = '''
+  inoremap <silent><expr> <C-l> ddc#complete_common_string()
+
+  call ddc#custom#patch_global(
+      \ 'sources', ['around', 'neosnippet', 'file']
+      \ )
+
+  call ddc#custom#patch_global('sourceOptions', {
+      \ '_': {
+      \   'ignoreCase': v:true,
+      \   'matchers': ['matcher_head'],
+      \   'sorters': ['sorter_rank'],
+      \ },
+      \ 'around': {
+      \   'mark': 'A',
+      \   'matchers': ['matcher_head', 'matcher_length'],
+      \ },
+      \ 'neosnippet': {
+      \   'mark': 'ns',
+      \   'dup':  'true',
+      \ },
+      \ 'nvim-lsp': {
+      \   'mark': 'LSP',
+      \   'forceCompletionPattern': '\.\w*|:\w*|->\w*'
+      \ },
+      \ 'file': {
+      \   'mark': 'F',
+      \   'isVolatile': v:true,
+      \   'minAutoCompleteLength': 1000,
+      \   'forceCompletionPattern': '\S/\S*'
+      \ },
+      \ })
+  call ddc#custom#patch_filetype(['ruby', 'typescript'], 'sources', has('nvim') ?
+  \ ['nvim-lsp', 'around', 'neosnippet', 'file'] : ['around', 'neosnippet', 'file']
+  \ )
+
+  inoremap <silent><expr> <TAB>
+  \ pumvisible() ? '<C-n>' :
+  \ (col('.') <= 1 <Bar><Bar> getline('.')[col('.') - 2] =~# '\s') ?
+  \ '<TAB>' : ddc#map#manual_complete()
+
+  inoremap <expr><S-TAB>  pumvisible() ? '<C-p>' : '<C-h>'
+
+  call ddc#enable()
+'''
+
+[[plugins]]
+repo = 'Shougo/ddc-sorter_rank'
+on_source = 'ddc.vim'
+
+[[plugins]]
+repo = 'Shougo/ddc-matcher_head'
+on_source = 'ddc.vim'
+
+[[plugins]]
+repo = 'Shougo/ddc-matcher_length'
+on_source = 'ddc.vim'
+
+[[plugins]]
+repo = 'Shougo/ddc-around'
+on_source = 'ddc.vim'
+
+[[plugins]]
+repo = 'Shougo/ddc-nvim-lsp'
+on_source = 'nvim-lspconfig'
+
+[[plugins]]
+repo = 'LumaKernel/ddc-file'
+on_source = 'ddc.vim'
+
+[[plugins]]
+repo = 'neovim/nvim-lspconfig'
+on_ft = ['ruby','typescript']
+if = 'has("nvim")'
+depends = 'ddc.vim'
+hook_source = '''
+  lua << EOF
+  require'lspconfig'.solargraph.setup{}
+  require'lspconfig'.denols.setup{}
+EOF
+'''
+
+[[plugins]]
+repo = 'matsui54/denops-popup-preview.vim'
+on_source = 'ddc.vim'
+hook_source = '''
+  call popup_preview#enable()
+'''

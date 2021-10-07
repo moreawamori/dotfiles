@@ -1,0 +1,180 @@
+[[plugins]]
+repo = 'bronson/vim-trailing-whitespace'
+
+[[plugins]]
+repo = 'Shougo/dein.vim'
+
+[[plugins]]
+repo = 'Yggdroot/indentLine'
+
+[[plugins]]
+repo = 'itchyny/lightline.vim'
+
+[[plugins]]
+repo = 'ryanoasis/vim-devicons'
+
+[[plugins]]
+repo = 'kana/vim-operator-user'
+
+[[plugins]]
+repo = 'w0rp/ale'
+hook_add = '''
+let g:ale_fixer = {
+    \ 'ruby': ['rubcop'],
+    \ }
+let g:ale_echo_msg_error_str = nr2char(0xf421) . ' '
+let g:ale_echo_msg_warning_str = nr2char(0xf420) . ' '
+let g:ale_echo_msg_info_str = nr2char(0xf05a) . ' '
+
+"let g:ale_echo_msg_error_str = '※' . ' '
+"let g:ale_echo_msg_warning_str = '△' . ' '
+"let g:ale_echo_msg_info_str = '✓' . ' '
+let g:ale_echo_msg_format = '%severity%  %linter% - %s'
+let g:ale_sign_column_always = 1
+let g:ale_sign_error = g:ale_echo_msg_error_str
+let g:ale_sign_warning = g:ale_echo_msg_warning_str
+let g:ale_statusline_format = [
+    \ g:ale_echo_msg_error_str . ' %d',
+    \ g:ale_echo_msg_warning_str . ' %d',
+    \ nr2char(0xf4a1) . '  ']
+'''
+
+# [[plugins]]
+# repo = 'majutsushi/tagbar'
+#
+# [[plugins]]
+# repo = 'sheerun/vim-polyglot'
+# hook_add = '''
+# let g:polyglot_disabled = ['markdown', 'tsx', 'typescript', 'csv']
+# '''
+
+[[plugins]]
+repo = 'vim-jp/vimdoc-ja'
+
+[[plugins]]
+repo = 'Shougo/vimproc.vim'
+build = 'make'
+
+[[plugins]]
+repo = 'roxma/vim-hug-neovim-rpc'
+on_if = '!has("nvim")'
+
+[[plugins]]
+repo = 'roxma/nvim-yarp'
+on_if = '!has("nvim")'
+
+[[plugins]]
+repo = 'cocopon/iceberg.vim'
+merged = 0
+
+[[plugins]]
+repo = 'ghifarit53/tokyonight-vim'
+merged = 0
+
+[[plugins]]
+repo = 'thinca/vim-quickrun'
+hook_add = '''
+let g:quickrun_config={}
+let g:quickrun_config['tex'] = {
+    \ 'command' : 'latexmk',
+    \ 'outputter' : 'error',
+    \ 'outputter/error/success' : 'null',
+    \ 'outputter/error/error' : 'quickfix',
+    \ 'srcfile' : expand("%"),
+    \ 'cmdopt': '-pdfdvi',
+    \ 'hook/sweep/files' : [
+    \                      '%S:p:r.aux',
+    \                      '%S:p:r.bbl',
+    \                      '%S:p:r.blg',
+    \                      '%S:p:r.dvi',
+    \                      '%S:p:r.fdb_latexmk',
+    \                      '%S:p:r.fls',
+    \                      '%S:p:r.log',
+    \                      '%S:p:r.out',
+    \                      '%S:p:r.nav',
+    \                      '%S:p:r.snm',
+    \                      '%S:p:r.toc'
+    \                      ],
+    \ 'exec': '%c %o %a %s',
+    \ }
+'''
+
+[[plugins]]
+repo = 'tyru/open-browser.vim'
+
+[[plugins]]
+repo = 'previm/previm'
+on_cmd = 'PrevimOpen'
+depends = 'open-browser.vim'
+
+[[plugins]]
+repo = 'delphinus/lightline-delphinus'
+hook_add = '''
+let g:lightline_delphinus_use_powerline_fonts_glyphs = 1
+let g:lightline_delphinus_tagbar_enable = 1
+let g:lightline = {
+    \ 'enable': {'tabline': '2'},
+    \ 'colorscheme': 'iceberg',
+    \ 'active': {
+    \ 'left': [
+         \ [ 'mode', 'paste' ],
+             \ [ 'fugitive', 'gitgutter', 'signify' ],
+             \ [ 'filepath' ],
+             \ [ 'filename', 'currenttag', 'ale_error', 'ale_warning', 'ale_ok' ],
+             \ ],
+        \ 'right': [
+            \ [ 'lineinfo'],
+            \ [ 'percent' ],
+            \ [ 'char_code', 'fileformat', 'fileencoding', 'date', 'filetype'],
+            \ ],
+            \ },
+    \ 'inactive': {
+        \ 'left': [ [ 'filepath' ], [ 'filename' ] ],
+        \ 'right': [ [ 'lineinfo' ], [ 'percent' ] ],
+        \ },
+    \ 'component_function': {
+        \ 'modified':     'lightline#delphinus#components#modified',
+        \ 'readonly':     'lightline#delphinus#components#readonly',
+        \ 'fugitive':     'lightline#delphinus#components#fugitive',
+        \ 'filepath':     'lightline#delphinus#components#filepath',
+        \ 'filename':     'lightline#delphinus#components#filename',
+        \ 'fileformat':   'lightline#delphinus#components#fileformat',
+        \ 'filetype':     'lightline#delphinus#components#filetype',
+        \ 'fileencoding': 'lightline#delphinus#components#fileencoding',
+        \ 'mode':         'lightline#delphinus#components#mode',
+        \ 'char_code':    'lightline#delphinus#components#charcode',
+        \ 'lineinfo':     'lightline#delphinus#components#lineinfo',
+        \ 'percent':      'lightline#delphinus#components#percent',
+        \ 'currenttag':   'lightline#delphinus#components#currenttag',
+        \ 'gitgutter':    'lightline#delphinus#components#gitgutter',
+        \ 'signify':      'lightline#delphinus#components#signify',
+        \ },
+    \ 'component_function_visible_condition': {
+        \ 'mode': 1,
+        \ 'currenttag': 0,
+        \ 'char_code': 0,
+        \ 'fileformat': 0,
+        \ 'filetype': 0,
+        \ 'fileencoding': 0,
+        \ },
+    \ 'component_expand': {
+        \ 'ale_error':   'lightline#delphinus#components#ale_error',
+        \ 'ale_warning': 'lightline#delphinus#components#ale_warning',
+        \ 'ale_ok':      'lightline#delphinus#components#ale_ok',
+        \ },
+    \ 'component_type': {
+        \ 'ale_error':   'error',
+        \ 'ale_warning': 'warning',
+        \ 'ale_ok':      'ok',
+        \ },
+    \ 'separator': {'left': "\ue0b0",'right': "\ue0b2"},
+    \ 'subseparator': {'left': "\ue0b1",'right': "\ue0b3"}
+    \ }
+
+'''
+
+[[plugins]]
+repo = 'cespare/vim-toml'
+
+# [[plugins]]
+# repo = 'mopp/sky-color-clock.vim'
