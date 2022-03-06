@@ -106,3 +106,7 @@ setlocal shiftwidth=2 softtabstop=2 tabstop=2
 tex = '''
 setlocal conceallevel=0
 '''
+dart = '''
+setlocal softtabstop=2
+setlocal shiftwidth=2
+'''

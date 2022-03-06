@@ -23,6 +23,10 @@ hook_source = '''
       \   'mark': 'ns',
       \   'dup':  'true',
       \ },
+      \ 'vsnip': {
+      \    'mark': "vs",
+      \    'dup': 'true',
+      \ },
       \ 'nvim-lsp': {
       \   'mark': 'LSP',
       \   'forceCompletionPattern': '\.\w*|:\w*|->\w*'
@@ -34,8 +38,8 @@ hook_source = '''
       \   'forceCompletionPattern': '\S/\S*'
       \ },
       \ })
-  call ddc#custom#patch_filetype(['ruby', 'typescript'], 'sources', has('nvim') ?
-  \ ['nvim-lsp', 'around', 'neosnippet', 'file'] : ['around', 'neosnippet', 'file']
+  call ddc#custom#patch_filetype(['ruby', 'typescript', 'dart', 'swift'], 'sources', has('nvim') ?
+  \ ['nvim-lsp', 'around', 'neosnippet', 'vsnip', 'file'] : ['around', 'neosnippet', 'file']
   \ )
 
   inoremap <silent><expr> <TAB>
@@ -74,13 +78,15 @@ on_source = 'ddc.vim'
 
 [[plugins]]
 repo = 'neovim/nvim-lspconfig'
-on_ft = ['ruby','typescript']
+on_ft = ['ruby','typescript', 'dart', 'swift']
 if = 'has("nvim")'
 depends = 'ddc.vim'
 hook_source = '''
   lua << EOF
   require'lspconfig'.solargraph.setup{}
   require'lspconfig'.denols.setup{}
+-- require'lspconfig'.dartls.setup{}
+  require'lspconfig'.sourcekit.setup{}
 EOF
 '''
 
@@ -90,3 +96,26 @@ on_source = 'ddc.vim'
 hook_source = '''
   call popup_preview#enable()
 '''
+
+[[plugins]]
+repo = 'hrsh7th/vim-vsnip'
+depends = ['vim-vsnip-integ', 'friendly-snippets']
+on_source = 'ddc.vim'
+on_event = 'InsertEnter'
+hook_add = '''
+" Expand
+imap <expr> <C-l> vsnip#expandable() ? '<Plug>(vsnip-expand)' : '<C-l>'
+smap <expr> <C-l> vsnip#expandable() ? '<Plug>(vsnip-expand)' : '<C-l>'
+" Jump forward or backward
+imap <expr> <C-f> vsnip#jumpable(1)  ? '<Plug>(vsnip-jump-next)' : '<C-f>'
+smap <expr> <C-f> vsnip#jumpable(1)  ? '<Plug>(vsnip-jump-next)' : '<C-f>'
+imap <expr> <C-b> vsnip#jumpable(-1) ? '<Plug>(vsnip-jump-prev)' : '<C-b>'
+smap <expr> <C-b> vsnip#jumpable(-1) ? '<Plug>(vsnip-jump-prev)' : '<C-b>'
+let g:vsnip_snippet_dir = expand('~/dotfiles/nvim/snippets')
+'''
+
+[[plugins]]
+repo = 'hrsh7th/vim-vsnip-integ'
+
+[[plugins]]
+repo = 'rafamadriz/friendly-snippets'

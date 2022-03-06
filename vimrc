@@ -5,138 +5,62 @@ if &compatible
     set nocompatible
 endif
 
-"=======================================================
-function! s:source_rc(path, ...) abort
-    let use_global = get(a:000, 0, !has('vim_starting'))
-    let abspath = resolve(expand('~/.vim/rc/' . a:path))
-    if !use_global
-        execute 'source' fnameescape(abspath)
-        return
+let $CACHE = expand('~/.cache')
+if !isdirectory($CACHE)
+  call mkdir($CACHE, 'p')
+endif
+
+" load secret_dein
+source ~/.vim/rc/secret_dein.rc.vim
+
+" Load dein.
+if &runtimepath !~# '/dein.vim'
+  let s:dein_dir = fnamemodify('dein.vim', ':p')
+  if !isdirectory(s:dein_dir)
+    let s:dein_dir = $CACHE . '/dein/repos/github.com/Shougo/dein.vim'
+    if !isdirectory(s:dein_dir)
+      execute '!git clone https://github.com/Shougo/dein.vim' s:dein_dir
     endif
-
-    "substitute all 'set' to 'setglobal'
-    let content = map(readfile(abspath),
-                \ 'substitute(v:val, "^\\W*\\zsset\\ze\\W","setglobal", "")')
-    "create tempfile and source the tempfile
-    let tempfile = tempname()
-    try
-        call writefile(content, tempfile)
-        execute 'source' fnameescape(tempfile)
-    finally
-        if filereadable(tempfile)
-            call delete(tempfile)
-        endif
-    endtry
-endfunction
-"=====================================================
-
-call s:source_rc('dein.rc.vim')
-call s:source_rc('init.rc.vim')
-call s:source_rc('secret_dein.rc.vim')
-call s:source_rc('mapping.rc.vim')
-if has('nvim')
-    call s:source_rc('neovim.rc.vim')
+  endif
+  execute 'set runtimepath^=' . substitute(
+        \ fnamemodify(s:dein_dir, ':p') , '[/\\]$', '', '')
 endif
 
-if !has('vim_starting')
-    call dein#call_hook('source')
-    call dein#call_hook('post_source')
-endif
-"---------------------------
-" Strings
-"---------------------------
-set fileencoding=utf-8
-set fileencodings=ucs-boms,utf-8,euc-jp,cp932
-set fileformats=unix,dos,mac
-set ambiwidth=single
-"-=========================
-" Status_Line
-"--------------------------
-set laststatus=2
-" set showmode
-set noshowmode
-set showcmd
-set ruler
-if !has('gui_running')
-    set t_Co=256
-endif
-set t_ut=
-"==========================
-" cmd mode
-"--------------------------
-set incsearch
-set ignorecase
-set smartcase
-set hlsearch
-nnoremap <silent><ESC><ESC> :<C-u>set nohlsearch!<CR>
+let g:dein#auto_recache = v:true
+let g:dein#lazy_rplugins = v:true
+let g:dein#install_progress_type = 'title'
+let g:dein#enable_notification = v:true
+" let g:dein#notification_icon = '~/.vim/signs/warn.png'
+let g:dein#install_log_filename = '~/dein.log'
 
-"nnoremap j gj
-"nnoremap k gk
-nnoremap <down> gj
-nnoremap <up> gk
-set backspace=indent,eol,start
-inoremap <silent> jj <ESC>
-"==========================
-set ttyfast
-set wrapscan
-set whichwrap=b,s,h,l,<,>,[,],~
-set number
-set autoindent
-set smartindent
-set showmatch
-source $VIMRUNTIME/macros/matchit.vim
-set matchpairs+=<:>
-set termguicolors
-set virtualedit=block
+let s:path = $CACHE . '/dein'
 
-set completeopt=menuone
-if exists('+completepopup')
-    set completeopt+=popup
-    set completepopup=height:4,width:60,highlight:InfoPopup
-endif
-set complete=
-set pumheight=20
+if dein#min#load_state(s:path)
+  let g:dein#inline_vimrcs = ['init.rc.vim', 'option.rc.vim','mapping.rc.vim']
 
-if exists('+breakindent')
-    set breakindent
-    set wrap
-else
-    set nowrap
+  if has('nvim')
+    call add(g:dein#inline_vimrcs, 'neovim.rc.vim')
+  endif
+
+  let s:base_dir = expand('~/.vim/rc/', ':h')
+  call map(g:dein#inline_vimrcs, { _, val -> s:base_dir . val })
+
+  let s:dein_toml = '~/.vim/rc/dein.toml'
+  let s:dein_lazy_toml = '~/.vim/rc/dein_lazy.toml'
+  let s:dein_ft_toml = '~/.vim/rc/dein_ft.toml'
+  let s:dein_ddc_toml = '~/.vim/rc/dein_ddc.toml'
+
+call dein#begin(s:path, [
+      \ expand('<sfile>'), s:dein_toml, s:dein_lazy_toml
+      \ ])
+
+call dein#load_toml(s:dein_toml, {'lazy': 0})
+call dein#load_toml(s:dein_lazy_toml, {'lazy' : 1})
+call dein#load_toml(s:dein_ddc_toml, {'lazy' : 1})
+call dein#load_toml(s:dein_ft_toml)
+
+call dein#end()
+call dein#save_state()
 endif
 
-set expandtab
-set tabstop=4
-"set softtabstop=4
-set shiftwidth=4
-set nf+=alpha " Serial number option: +Alphabet (default: hex,bin)
-set background=dark
-
-"set cursorline
-set laststatus=2
-set wildmenu
-
-colorscheme tokyonight
-let g:tokyonight_style = 'storm'
-set title
-" Transparent
- "augroup TransparentBG
- "    autocmd!
- "    autocmd Colorscheme * highlight Normal ctermbg=NONE guibg=NONE 
- "    autocmd Colorscheme * highlight NonText ctermbg=NONE guibg=NONE
- "    autocmd Colorscheme * highlight LineNr ctermbg=NONE guibg=NONE
- "    autocmd Colorscheme * highlight Folded ctermbg=NONE guibg=NONE
- "    autocmd Colorscheme * highlight EndOfBuffer ctermbg=NONE guibg=NONE
- "augroup END
-
-syntax enable
-filetype plugin indent on
-filetype on
-let g:ruby_no_expensive = 1
-
-autocmd Filetype cpp set keywordprg=/usr/bin/cppman
-set helplang=ja,en
-let g:previm_enable_realtime = 1
-
-set conceallevel=0
-let g:tex_conceal=''
 set secure

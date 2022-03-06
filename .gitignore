@@ -1,1 +1,3 @@
 vim/rc/secret_dein.rc.vim
+vim/rc/dein_local.toml
+vim/rc/dein_local_lazy.toml

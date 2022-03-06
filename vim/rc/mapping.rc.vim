@@ -18,6 +18,8 @@ xnoremap < <gv
 if (!has('nvim') || $DISPLAY != '') && has('clipboard')
   xnoremap <silent> y "*y:let [@+,@"]=[@*,@*]<CR>
 endif
+
+" Normal
 nnoremap <silent> <C-l>    :<C-u>redraw!<CR>
 nmap  <Space>   [Space]
 nnoremap  [Space]   <Nop>
@@ -28,10 +30,20 @@ nnoremap    [Window]   <Nop>
 nmap    s [Window]
 nnoremap <silent> [Window]p  :<C-u>vsplit<CR>:wincmd w<CR>
 nnoremap <silent> [Window]o  :<C-u>only<CR>
-nnoremap <silent> <Tab>      :wincmd w<CR>
-nnoremap <silent><expr> q winnr('$') != 1 ? ':<C-u>close<CR>' : ""
 
-"on terminal mode
+nnoremap <silent> <Tab>      <Cmd>wincmd w<CR>
+nnoremap <silent><expr> q winnr('$') != 1 ? ':<C-u>close<CR>' : ""
+nnoremap <silent><ESC><ESC> :<C-u>set nohlsearch!<CR>
+
+"nnoremap j gj
+"nnoremap k gk
+nnoremap <down> gj
+nnoremap <up> gk
+
+" Insert
+inoremap <silent> jj <ESC>
+
+" Terminal mode
 if exists(':tnoremap')
   tnoremap   <ESC>      <C-\><C-n>
   tnoremap   jk         <C-\><C-n>
