@@ -18,5 +18,5 @@ endif
 if exists('&winblend')
   "set winblend=20
 endif
-"set termguicolors
+set termguicolors
 set guicursor=

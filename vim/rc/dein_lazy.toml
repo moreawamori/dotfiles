@@ -8,7 +8,6 @@ on_source = ['denite.nvim']
 
 [[plugins]]
 repo = 'skanehira/translate.vim'
-#if = '!has("nvim")'
 
 [[plugins]]
 repo = 'Shougo/neosnippet-snippets'
@@ -16,24 +15,6 @@ repo = 'Shougo/neosnippet-snippets'
 [[plugins]]
 repo = 'Shougo/context_filetype.vim'
 
-[[plugins]]
-repo = 'Shougo/neosnippet.vim'
-depends = ['neosnippet-snippets', 'context_filetype.vim']
-on_event = 'InsertCharPre'
-on_ft = 'snippet'
-hook_source = '''
-    imap <silent><C-k>     <Plug>(neosnippet_jump_or_expand)
-    smap <silent><C-k>     <Plug>(neosnippet_jump_or_expand)
-    xmap <silent><C-k>     <Plug>(neosnippet_expand_target)
-    let g:neosnippet#enable_snipmate_compatibility = 1
-    let g:neosnippet#enable_completed_snippet = 1
-    let g:neosnippet#expand_word_boundary = 1
-    let g:neosnippet#snippets_directory = '~/.vim/snippets'
-    " if has('conceal')
-    "     set conceallevel=0
-    " endif
-
-'''
 
 [[plugins]]
 repo = 'Shougo/defx.nvim'
@@ -259,7 +240,7 @@ require'nvim-treesitter.configs'.setup {
         disable = {
             'toml',
             'markdown',
-            },
+        },
     },
 }
 EOF

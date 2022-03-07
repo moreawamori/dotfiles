@@ -70,8 +70,12 @@ set termguicolors
 syntax enable
 filetype plugin indent on
 filetype on
-colorscheme tokyonight
-let g:tokyonight_style = 'storm'
+
+if has('nvim')
+  colorscheme tokyonight
+else
+  colorscheme iceberg
+end
 
 let g:ruby_no_expensive = 1
 

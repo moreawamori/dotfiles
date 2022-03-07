@@ -2,7 +2,7 @@ set encoding=utf-8
 scriptencoding utf-8
 
 if &compatible
-    set nocompatible
+  set nocompatible
 endif
 
 let $CACHE = expand('~/.cache')
@@ -50,17 +50,21 @@ if dein#min#load_state(s:path)
   let s:dein_ft_toml = '~/.vim/rc/dein_ft.toml'
   let s:dein_ddc_toml = '~/.vim/rc/dein_ddc.toml'
 
-call dein#begin(s:path, [
-      \ expand('<sfile>'), s:dein_toml, s:dein_lazy_toml
-      \ ])
+  call dein#begin(s:path, [
+        \ expand('<sfile>'), s:dein_toml, s:dein_lazy_toml
+        \ ])
 
-call dein#load_toml(s:dein_toml, {'lazy': 0})
-call dein#load_toml(s:dein_lazy_toml, {'lazy' : 1})
-call dein#load_toml(s:dein_ddc_toml, {'lazy' : 1})
-call dein#load_toml(s:dein_ft_toml)
+  call dein#load_toml(s:dein_toml, {'lazy': 0})
+  call dein#load_toml(s:dein_lazy_toml, {'lazy' : 1})
+  call dein#load_toml(s:dein_ddc_toml, {'lazy' : 1})
+  call dein#load_toml(s:dein_ft_toml)
 
-call dein#end()
-call dein#save_state()
+  call dein#end()
+  call dein#save_state()
 endif
+
+syntax enable
+filetype plugin indent on
+filetype detect
 
 set secure

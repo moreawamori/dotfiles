@@ -68,8 +68,13 @@ repo = 'cocopon/iceberg.vim'
 merged = 0
 
 [[plugins]]
-repo = 'ghifarit53/tokyonight-vim'
-merged = 0
+repo = 'folke/tokyonight.nvim'
+on_if = 'has("nvim")'
+hook_add = '''
+  let g:tokyonight_style = "night"
+  let g:tokyonight_italic_comments = 0
+  let g:tokyonight_italic_keywords = 0
+'''
 
 [[plugins]]
 repo = 'thinca/vim-quickrun'
