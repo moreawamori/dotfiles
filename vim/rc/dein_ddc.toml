@@ -105,6 +105,7 @@ function! CommandlinePre() abort
   call ddc#enable_cmdline_completion()
   call ddc#enable()
 endfunction
+
 function! CommandlinePost() abort
   " Restore sources
   call ddc#custom#set_buffer(s:prev_buffer_config)
@@ -152,7 +153,7 @@ hook_source = '''
 
     require'lspconfig'.solargraph.setup{}
     require'lspconfig'.denols.setup{}
-    -- require'lspconfig'.dartls.setup{}
+    require'lspconfig'.dartls.setup{}
     require'lspconfig'.sourcekit.setup{capabilities = capabilities}
 EOF
 '''
@@ -160,6 +161,7 @@ EOF
 [[plugins]]
 repo = 'matsui54/denops-popup-preview.vim'
 on_source = 'ddc.vim'
+on_event = 'InsertEnter'
 hook_source = '''
   let g:popup_preview_config = {
 	    \ 'delay': 30,
@@ -172,9 +174,10 @@ hook_source = '''
 [[plugins]]
 repo = 'matsui54/denops-signature_help'
 on_source = 'ddc.vim'
+on_event = 'InsertEnter'
 hook_source = '''
 	let g:signature_help_config = {
-        \ 'style': 'labelOnly',
+        \ 'style': 'full',
         \ 'border': v:true,
         \ }
   call signature_help#enable()
