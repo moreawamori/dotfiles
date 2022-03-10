@@ -174,7 +174,7 @@ repo = 'matsui54/denops-signature_help'
 on_source = 'ddc.vim'
 hook_source = '''
 	let g:signature_help_config = {
-        \ 'style': 'labelOnly',
+        \ 'style': 'full',
         \ 'border': v:true,
         \ }
   call signature_help#enable()
