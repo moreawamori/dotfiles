@@ -16,7 +16,7 @@ alias nvim="$HOME/bin/nvim/nvim.appimage"
 alias vim='nvim'
 alias du='du -c -h'
 alias du1='du --max-depth=1'
-alias hist='history | greo'
+alias hist='history | grep'
 alias pstree='ps awwfux | less -S'
 
 # alias for exa
