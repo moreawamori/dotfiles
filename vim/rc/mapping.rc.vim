@@ -26,10 +26,9 @@ nnoremap  [Space]   <Nop>
 nnoremap <silent> [Space]ev  :<C-u>edit $MYVIMRC<CR>
 " s: Windows and buffers(High priority)
 " " The prefix key.
-nnoremap    [Window]   <Nop>
-nmap    s [Window]
-nnoremap <silent> [Window]p  :<C-u>vsplit<CR>:wincmd w<CR>
-nnoremap <silent> [Window]o  :<C-u>only<CR>
+nnoremap s <Nop>
+nnoremap <silent> sp  :<C-u>vsplit<CR>:wincmd w<CR>
+nnoremap <silent> so  :<C-u>only<CR>
 
 nnoremap <silent> <Tab>      <Cmd>wincmd w<CR>
 nnoremap <silent><expr> q winnr('$') != 1 ? ':<C-u>close<CR>' : ""

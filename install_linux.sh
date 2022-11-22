@@ -66,7 +66,7 @@ if [[ ! $(command -v deno) ]]; then
     cd ~
     curl -fsSL https://deno.land/install.sh | sh
     if [ -f ~/.bashrc ];then
-        if [ $DENO_INSTALL != $HOME/.deno ]; then
+        if [ "$DENO_INSTALL" != "$HOME/.deno" ]; then
             touch ~/.extrapathes
             echo 'export DENO_INSTALL="$HOME/.deno' >> ~/.extrapathes
             echo 'export PATH="$DENO_INSTALL/bin:$PATH"' >> ~/.extrapathes

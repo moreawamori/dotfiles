@@ -72,9 +72,14 @@ esac
 #   sleep 10; alert
 alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
 
+if [ -f ~/.extrapathes ]; then
+    source ~/.extrapathes
+. "$HOME/.cargo/env"
+fi
+
 # Alias definitions.
 if [ -f ~/.bash_aliases ]; then
-    . ~/.bash_aliases
+    source ~/.bash_aliases
 fi
 
 if ! shopt -oq posix; then
@@ -85,6 +90,4 @@ if ! shopt -oq posix; then
   fi
 fi
 
-if [ -f ~/.extrapathes ]; then
-    . ~/.extrapathes
-fi
+# . "$HOME/.cargo/env"

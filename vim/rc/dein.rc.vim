@@ -28,6 +28,7 @@ let s:dein_toml = '~/.vim/rc/dein.toml'
 let s:dein_lazy_toml = '~/.vim/rc/dein_lazy.toml'
 let s:dein_ft_toml = '~/.vim/rc/dein_ft.toml'
 let s:dein_ddc_toml = '~/.vim/rc/dein_ddc.toml'
+let s:dein_ddu_toml = '~/.vim/rc/dein_ddu.toml'
 call dein#begin(s:path, [
       \ expand('<sfile>'), s:dein_toml, s:dein_lazy_toml
       \ ])
@@ -35,6 +36,7 @@ call dein#begin(s:path, [
 call dein#load_toml(s:dein_toml, {'lazy': 0})
 call dein#load_toml(s:dein_lazy_toml, {'lazy' : 1})
 call dein#load_toml(s:dein_ddc_toml, {'lazy' : 1})
+call dein#load_toml(s:dein_ddu_toml, {'lazy' : 1})
 call dein#load_toml(s:dein_ft_toml)
 call dein#end()
 call dein#save_state()

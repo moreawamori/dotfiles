@@ -1,5 +1,5 @@
-[[plugins]]
-repo = 'bronson/vim-trailing-whitespace'
+# [[plugins]]
+# repo = 'bronson/vim-trailing-whitespace'
 
 [[plugins]]
 repo = 'Shougo/dein.vim'
@@ -180,6 +180,3 @@ let g:lightline = {
 
 [[plugins]]
 repo = 'cespare/vim-toml'
-
-# [[plugins]]
-# repo = 'mopp/sky-color-clock.vim'
