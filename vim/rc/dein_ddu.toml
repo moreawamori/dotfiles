@@ -27,7 +27,6 @@ call ddu#custom#patch_global(#{
     \   },
     \   file_old: #{
     \     matchers: ['matcher_substring'],
-    \     mark: 'O',
     \   },
     \   file_rec: #{
     \     matchers: ['matcher_substring'],
