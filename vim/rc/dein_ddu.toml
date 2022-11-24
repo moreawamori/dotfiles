@@ -38,6 +38,9 @@ call ddu#custom#patch_global(#{
     \   action: #{ defaultAction: 'do' },
     \   word: #{ defaultAction: 'append' },
     \ },
+    \   actionOptions: #{
+    \     narrow: #{ quit: v:false },
+    \   },
     \ })
 
 call ddu#custom#patch_global(#{
