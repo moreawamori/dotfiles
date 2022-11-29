@@ -185,11 +185,10 @@ nnoremap <buffer> c <Cmd>call ddu#ui#filer#multi_actions([
     \ [ 'itemAction', #{ name: 'copy' } ],
     \ [ 'clearSelectAllItems' ],
     \ ])<CR>
-nnoremap <buffer> m <Cmd>call ddu#ui#filer#multi_actions([
-    \ [ 'itemAction', #{ name: 'move' } ],
-    \ [ 'clearSelectAllItems' ],
-    \ ])<CR>
-nnoremap <buffer> p <Cmd>call ddu#ui#filer#do_action('paste')<CR>
+nnoremap <buffer> m <Cmd>call ddu#ui#filer#do_action(
+    \ 'itemAction', #{ name: 'move' } 
+    \ )<CR>
+nnoremap <buffer> p <Cmd>call ddu#ui#filer#do_action('itemAction',#{ name: 'paste' })<CR>
 
 nnoremap <buffer> yy <Cmd>call ddu#ui#filer#multi_actions([
     \ [ 'itemAction', #{ name: 'yank' } ],
