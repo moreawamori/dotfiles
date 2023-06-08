@@ -94,10 +94,11 @@ on_cmd = 'GhostStart'
 repo = 'rcarriga/nvim-notify'
 on_lua = 'notify'
 
-[[plugins]]
-repo = 'dag/vim2hs'
-on_ft = 'haskell'
-hook_source = '''
-let g:haskell_conceal = v:false
-'''
+# [[plugins]]
+# repo = 'dag/vim2hs'
+# on_ft = 'haskell'
+# hook_source = '''
+# let g:haskell_conceal = v:false
+# '''
+
 

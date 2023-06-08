@@ -50,6 +50,7 @@ if dein#min#load_state(s:path)
   let s:dein_ft_toml = '~/.vim/rc/dein_ft.toml'
   let s:dein_ddc_toml = '~/.vim/rc/dein_ddc.toml'
   let s:dein_ddu_toml = '~/.vim/rc/dein_ddu.toml'
+  let s:dein_nvim_toml = '~/.vim/rc/dein_nvim.toml'
 
   call dein#begin(s:path, [
         \ expand('<sfile>'), s:dein_toml, s:dein_lazy_toml
@@ -59,6 +60,7 @@ if dein#min#load_state(s:path)
   call dein#load_toml(s:dein_lazy_toml, {'lazy' : 1})
   call dein#load_toml(s:dein_ddc_toml, {'lazy' : 1})
   call dein#load_toml(s:dein_ddu_toml, {'lazy' : 1})
+  call dein#load_toml(s:dein_nvim_toml, #{lazy : 1})
   call dein#load_toml(s:dein_ft_toml)
 
   call dein#end()
