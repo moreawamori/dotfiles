@@ -1,9 +1,13 @@
+# pum.vim
+[[plugins]]
+repo = 'Shougo/pum.vim'
+
 [[plugins]]
 repo = 'Shougo/ddc.vim'
 depends = ['context_filetype.vim', 'denops.vim', 'pum.vim']
 on_event = 'InsertEnter'
 hook_source = '''
-  inoremap <silent><expr> <C-l> ddc#complete_common_string()
+  inoremap <silent><expr> <C-b> ddc#complete_common_string()
 
   call ddc#custom#patch_global('ui', 'pum')
 
@@ -16,6 +20,7 @@ hook_source = '''
       \   'ignoreCase': v:true,
       \   'matchers': ['matcher_head'],
       \   'sorters': ['sorter_rank'],
+      \   'converters': ['converter_remove_overlap'],
       \ },
       \ 'around': {
       \   'mark': 'A',
@@ -34,14 +39,14 @@ hook_source = '''
       \   'matchers': ['matcher_head', 'matcher_length'],
       \   'minAutoCompleteLength': 4,
       \ },
-      \ 'vsnip': {
-      \    'mark': "vs",
-      \    'dup': 'true',
-      \ },
       \ 'nvim-lsp': {
       \   'mark': 'LSP',
       \   'forceCompletionPattern': '\.\w*|:\w*|->\w*',
       \   'dup': 'force',
+      \ },
+      \ 'vsnip': {
+      \   'mark': 'vs',
+      \   'dup': 'keep',
       \ },
       \ 'file': {
       \   'mark': 'F',
@@ -50,6 +55,9 @@ hook_source = '''
       \   'forceCompletionPattern': '\S/\S*'
       \ },
       \ })
+      call ddc#custom#patch_global('sourceParams', {
+              \ 'nvim-lsp': { 'kindLabels': { 'Class': 'c' } },
+              \ })
 
   call ddc#custom#patch_global('cmdlineSources', {
 		    \ ':': ['cmdline-history', 'cmdline', 'around'],
@@ -62,22 +70,20 @@ hook_source = '''
 		    \ })
 
   call ddc#custom#patch_filetype(
-  \ ['ruby', 'typescript', 'dart', 'swift','julia', 'python'],
-  \ 'sources', has('nvim') ?
-  \ ['nvim-lsp', 'vsnip', 'around', 'file'] :
-  \ ['vsnip', 'around', 'file']
-  \ )
+          \ ['ruby', 'python'],
+          \ 'sources', has('nvim') ?
+          \ ['nvim-lsp', 'vsnip','around', 'file'] :
+          \ ['vsnip', 'around', 'file']
+          \ )
 
   " Use pum.vim
-
-
   call ddc#custom#patch_global('autoCompleteEvents', [
-    \ 'InsertEnter', 'TextChangedI', 'TextChangedP',
-    \ 'CmdlineEnter', 'CmdlineChanged',
-    \ ])
+          \ 'InsertEnter', 'TextChangedI', 'TextChangedP',
+          \ 'CmdlineEnter', 'CmdlineChanged',
+          \ ])
 
   inoremap <silent><expr> <TAB>
-        \ pum#visible() ? '<Cmd>call pum#map#insert_relative(+1)<CR>' :
+        \ pum#visible() ? '<Cmd>call pum#map#insert_relative(+1, "loop")<CR>' :
         \ (col('.') <= 1 <Bar><Bar> getline('.')[col('.') - 2] =~# '\s') ?
         \ '<TAB>' : ddc#map#manual_complete()
   inoremap <S-Tab> <Cmd>call pum#map#insert_relative(-1)<CR>
@@ -85,7 +91,10 @@ hook_source = '''
   inoremap <C-p>   <Cmd>call pum#map#select_relative(-1)<CR>
   inoremap <C-y>   <Cmd>call pum#map#confirm()<CR>
   inoremap <C-e>   <Cmd>call pum#map#cancel()<CR>
+  inoremap <expr> <C-l>  ddc#map#manual_complete()
 
+  call popup_preview#enable()
+  call signature_help#enable()
   call ddc#enable()
 '''
 
@@ -133,67 +142,69 @@ repo = 'Shougo/ddc-matcher_length'
 on_source = 'ddc.vim'
 
 [[plugins]]
-repo = 'Shougo/ddc-around'
+repo = 'Shougo/ddc-source-around'
 on_source = 'ddc.vim'
 
 [[plugins]]
-repo = 'Shougo/ddc-rg'
+repo = 'Shougo/ddc-source-rg'
 on_source = 'ddc.vim'
 
 [[plugins]]
 repo = 'Shougo/ddc-source-nvim-lsp'
-on_source = 'nvim-lspconfig'
-
-[[plugins]]
-repo = 'LumaKernel/ddc-file'
 on_source = 'ddc.vim'
 
+[[plugins]]
+repo = 'LumaKernel/ddc-source-file'
+on_source = 'ddc.vim'
+
+[[plugins]]
+repo = 'Shougo/ddc-filter-converter_remove_overlap'
+on_source = 'ddc.vim'
 
 [[plugins]]
 repo = 'matsui54/denops-popup-preview.vim'
 on_source = 'ddc.vim'
-on_event = 'InsertEnter'
-hook_source = '''
+hook_add = '''
   let g:popup_preview_config = {
 	    \ 'delay': 30,
-        \ 'maxWidth': 20,
-        \ 'winblend': 'winblend',
+        \ 'maxWidth': 100,
+        \ 'winblend': 0,
 	    \ }
-  call popup_preview#enable()
 '''
 
 [[plugins]]
 repo = 'matsui54/denops-signature_help'
 on_source = 'ddc.vim'
-on_event = 'InsertEnter'
-hook_source = '''
+hook_add = '''
 	let g:signature_help_config = {
         \ 'style': 'full',
         \ 'border': v:true,
         \ }
-  call signature_help#enable()
 '''
 
 [[plugins]]
 repo = 'hrsh7th/vim-vsnip'
 depends = ['vim-vsnip-integ', 'friendly-snippets']
-on_source = 'ddc.vim'
 on_event = 'InsertEnter'
+on_source = 'ddc.vim'
 hook_add = '''
 " Expand
 imap <expr> <C-l> vsnip#expandable() ? '<Plug>(vsnip-expand)' : '<C-l>'
 smap <expr> <C-l> vsnip#expandable() ? '<Plug>(vsnip-expand)' : '<C-l>'
 " Jump forward or backward
-imap <expr> <C-f> vsnip#jumpable(1)  ? '<Plug>(vsnip-jump-next)' : '<C-f>'
-smap <expr> <C-f> vsnip#jumpable(1)  ? '<Plug>(vsnip-jump-next)' : '<C-f>'
-imap <expr> <C-b> vsnip#jumpable(-1) ? '<Plug>(vsnip-jump-prev)' : '<C-b>'
-smap <expr> <C-b> vsnip#jumpable(-1) ? '<Plug>(vsnip-jump-prev)' : '<C-b>'
+imap <expr> <Tab> vsnip#jumpable(1)  ? '<Plug>(vsnip-jump-next)' : '<Tab>'
+smap <expr> <Tab> vsnip#jumpable(1)  ? '<Plug>(vsnip-jump-next)' : '<Tab>'
+imap <expr> <S-Tab> vsnip#jumpable(-1) ? '<Plug>(vsnip-jump-prev)' : '<S-Tab>'
+smap <expr> <S-Tab> vsnip#jumpable(-1) ? '<Plug>(vsnip-jump-prev)' : '<S-Tab>'
 let g:vsnip_snippet_dir = expand('~/dotfiles/vim/snippets')
-autocmd User PumCompleteDone call vsnip_integ#on_complete_done(g:pum#completed_item)
 '''
 
 [[plugins]]
 repo = 'hrsh7th/vim-vsnip-integ'
+hook_add = '''
+    autocmd User PumCompleteDone call vsnip_integ#on_complete_done(g:pum#completed_item)
+    autocmd User PumCompleteDone * echom "現在のファイルは「" . expand('%:t') . "」です。"
+'''
 
 [[plugins]]
 repo = 'rafamadriz/friendly-snippets'
@@ -216,9 +227,6 @@ repo = 'rafamadriz/friendly-snippets'
 #     " endif
 # '''
 
-# pum.vim
-[[plugins]]
-repo = 'Shougo/pum.vim'
 
 [[plugins]]
 repo = 'Shougo/ddc-cmdline'

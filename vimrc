@@ -5,6 +5,11 @@ if &compatible
   set nocompatible
 endif
 
+if has('nvim')
+  " https://zenn.dev/kawarimidoll/articles/19bfc63e1c218c
+  "lua if vim.loader then vim.loader.enable() end
+endif
+
 let $CACHE = expand('~/.cache')
 if !isdirectory($CACHE)
   call mkdir($CACHE, 'p')
@@ -56,10 +61,10 @@ if dein#min#load_state(s:path)
         \ expand('<sfile>'), s:dein_toml, s:dein_lazy_toml
         \ ])
 
-  call dein#load_toml(s:dein_toml, {'lazy': 0})
-  call dein#load_toml(s:dein_lazy_toml, {'lazy' : 1})
-  call dein#load_toml(s:dein_ddc_toml, {'lazy' : 1})
-  call dein#load_toml(s:dein_ddu_toml, {'lazy' : 1})
+  call dein#load_toml(s:dein_toml, #{lazy: 0})
+  call dein#load_toml(s:dein_lazy_toml, #{lazy : 1})
+  call dein#load_toml(s:dein_ddc_toml, #{lazy : 1})
+  call dein#load_toml(s:dein_ddu_toml, #{lazy : 1})
   call dein#load_toml(s:dein_nvim_toml, #{lazy : 1})
   call dein#load_toml(s:dein_ft_toml)
 

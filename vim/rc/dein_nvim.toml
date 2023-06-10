@@ -1,24 +1,38 @@
 [[plugins]]
 repo = 'neovim/nvim-lspconfig'
-if = 'has("nvim")'
-depends = 'ddc.vim'
-hook_source = '''
-  lua << EOF
-    local capabilities = vim.lsp.protocol.make_client_capabilities()
-    capabilities.textDocument.completion.completionItem.snippetSupport = true
+lua_source = '''
 
- --   require'lspconfig'.solargraph.setup{}
- --   require'lspconfig'.denols.setup{}
- --   require'lspconfig'.dartls.setup{}
- --   require'lspconfig'.sourcekit.setup{capabilities = capabilities}
- --   require'lspconfig'.julials.setup{}
- --   require'lspconfig'.pylsp.setup{capabilities=capabilities}
-EOF
+require("vim.lsp._watchfiles")._watchfunc = require("vim._watch").watch
+
+require('lspconfig').solargraph.setup {
+    single_file_support = true,
+                        capabilities = {},
+}
+
+-- local capabilities = vim.lsp.protocol.make_client_capabilities()
+-- 
+--     capabilities.textDocument.completion.completionItem.snippetSupport = true
+
+    vim.lsp.handlers['textDocument/publishDiagnostics'] = vim.lsp.with(
+            vim.lsp.diagnostic.on_publish_diagnostics, {
+            update_in_insert = false,
+            virtual_text = {
+            format = function(diagnostic)
+            return string.format(
+                    '%s (%s: %s)',
+                    diagnostic.message,
+                    diagnostic.source,
+                    diagnostic.code
+                    )
+            end
+            },
+            })
 '''
 
 [[plugins]]
 repo = 'williamboman/mason.nvim'
 on_event = ['BufRead']
+depends='mason-lspconfig.nvim'
 lua_source = '''
 require('mason').setup()
 '''
@@ -36,9 +50,10 @@ require('mason-lspconfig').setup_handlers({ function(server_name)
         vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, bufopts)
         vim.keymap.set('n', 'gtD', vim.lsp.buf.type_definition, bufopts)
         vim.keymap.set('n', 'grf', vim.lsp.buf.references, bufopts)
-        vim.keymap.set('n', '<space>p', vim.lsp.buf.format, bufopts)
+        vim.keymap.set('n', '<space><space>', vim.lsp.buf.format, bufopts)
         end
 
         nvim_lsp[server_name].setup(opts)
+        end
         })
 '''

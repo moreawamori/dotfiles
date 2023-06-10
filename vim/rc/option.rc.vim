@@ -1,3 +1,7 @@
+if has('win32')
+  set shellslash
+endif
+
 set fileencoding=utf-8
 set fileencodings=ucs-boms,utf-8,euc-jp,cp932
 set fileformats=unix,dos,mac
@@ -39,6 +43,7 @@ if exists('+completepopup')
     set completepopup=height:4,width:60,highlight:InfoPopup
 endif
 set complete=
+set completeslash=slash
 set pumheight=20
 
 if exists('+breakindent')
@@ -47,6 +52,11 @@ if exists('+breakindent')
 else
     set nowrap
 endif
+
+if has('nvim')
+"  set omnifunc=v:lua.vim.lsp.omnifunc
+endif
+
 
 set expandtab
 set tabstop=4
@@ -67,9 +77,6 @@ set title
  "augroup END
 
 set termguicolors
-syntax enable
-filetype plugin indent on
-filetype on
 
 if has('nvim')
   colorscheme tokyonight
@@ -80,7 +87,7 @@ end
 let g:ruby_no_expensive = 1
 
 set helplang=ja,en
-let g:previm_enable_realtime = 1
+"let g:previm_enable_realtime = 1
 
 set conceallevel=0
 let g:tex_conceal=''

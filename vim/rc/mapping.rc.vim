@@ -47,7 +47,6 @@ if exists(':tnoremap')
   tnoremap   <ESC>      <C-\><C-n>
   tnoremap   jk         <C-\><C-n>
   tnoremap   j<Space>   j
-"  tnoremap <expr> ;  vimrc#sticky_func()
 endif
 
 nnoremap Q  q
