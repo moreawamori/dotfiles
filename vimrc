@@ -7,7 +7,7 @@ endif
 
 if has('nvim')
   " https://zenn.dev/kawarimidoll/articles/19bfc63e1c218c
-  "lua if vim.loader then vim.loader.enable() end
+  lua if vim.loader then vim.loader.enable() end
 endif
 
 let $CACHE = expand('~/.cache')
@@ -33,7 +33,7 @@ endif
 
 let g:dein#auto_recache = v:true
 let g:dein#lazy_rplugins = v:true
-let g:dein#install_progress_type = 'title'
+let g:dein#install_progress_type = 'floating'
 let g:dein#enable_notification = v:true
 " let g:dein#notification_icon = '~/.vim/signs/warn.png'
 let g:dein#install_log_filename = '~/dein.log'

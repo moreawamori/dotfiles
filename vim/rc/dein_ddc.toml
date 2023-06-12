@@ -1,6 +1,21 @@
 # pum.vim
 [[plugins]]
 repo = 'Shougo/pum.vim'
+hook_source = '''
+  call pum#set_option(#{
+    \   auto_confirm_time: 3000,
+    \   auto_select: v:false,
+    \   horizontal_menu: v:false,
+    \   max_width: 80,
+    \   offset_cmdcol: 0,
+    \   padding: v:false,
+    \   use_complete: v:true,
+    \   use_setline: v:false,
+    \ })
+  call pum#set_local_option('c', #{
+    \   horizontal_menu: v:false,
+    \ })
+'''
 
 [[plugins]]
 repo = 'Shougo/ddc.vim'
@@ -10,6 +25,12 @@ hook_source = '''
   inoremap <silent><expr> <C-b> ddc#complete_common_string()
 
   call ddc#custom#patch_global('ui', 'pum')
+
+
+  call ddc#custom#patch_global('autoCompleteEvents', [
+          \ 'InsertEnter', 'TextChangedI', 'TextChangedP',
+          \ 'CmdlineEnter', 'CmdlineChanged',
+          \ ])
 
   call ddc#custom#patch_global(
       \ 'sources', ['around', 'rg', 'file']
@@ -37,16 +58,12 @@ hook_source = '''
       \ 'rg': {
       \   'mark': 'rg',
       \   'matchers': ['matcher_head', 'matcher_length'],
-      \   'minAutoCompleteLength': 4,
+      \   'minAutoCompleteLength': 1,
       \ },
       \ 'nvim-lsp': {
       \   'mark': 'LSP',
       \   'forceCompletionPattern': '\.\w*|:\w*|->\w*',
       \   'dup': 'force',
-      \ },
-      \ 'vsnip': {
-      \   'mark': 'vs',
-      \   'dup': 'keep',
       \ },
       \ 'file': {
       \   'mark': 'F',
@@ -72,16 +89,12 @@ hook_source = '''
   call ddc#custom#patch_filetype(
           \ ['ruby', 'python'],
           \ 'sources', has('nvim') ?
-          \ ['nvim-lsp', 'vsnip','around', 'file'] :
-          \ ['vsnip', 'around', 'file']
+          \ ['nvim-lsp','around', 'file'] :
+          \ ['around', 'file']
           \ )
 
-  " Use pum.vim
-  call ddc#custom#patch_global('autoCompleteEvents', [
-          \ 'InsertEnter', 'TextChangedI', 'TextChangedP',
-          \ 'CmdlineEnter', 'CmdlineChanged',
-          \ ])
 
+  " Use pum.vim
   inoremap <silent><expr> <TAB>
         \ pum#visible() ? '<Cmd>call pum#map#insert_relative(+1, "loop")<CR>' :
         \ (col('.') <= 1 <Bar><Bar> getline('.')[col('.') - 2] =~# '\s') ?
@@ -109,11 +122,6 @@ function! CommandlinePre() abort
   cnoremap <S-Tab> <Cmd>call pum#map#insert_relative(-1)<CR>
   cnoremap <C-y>   <Cmd>call pum#map#confirm()<CR>
   cnoremap <C-e>   <Cmd>call pum#map#cancel()<CR>
-
-  " Overwrite sources
-  " let s:prev_buffer_config = ddc#custom#get_buffer()
-  " call ddc#custom#patch_buffer('cmdLineSources',
-  "         \ ['cmdline', 'cmdline-history', 'around'])
 
   autocmd User DDCCmdlineLeave ++once call CommandlinePost()
 
@@ -202,31 +210,11 @@ let g:vsnip_snippet_dir = expand('~/dotfiles/vim/snippets')
 [[plugins]]
 repo = 'hrsh7th/vim-vsnip-integ'
 hook_add = '''
-    autocmd User PumCompleteDone call vsnip_integ#on_complete_done(g:pum#completed_item)
-    autocmd User PumCompleteDone * echom "現在のファイルは「" . expand('%:t') . "」です。"
+autocmd User PumCompleteDone call vsnip_integ#on_complete_done(g:pum#completed_item)
 '''
 
 [[plugins]]
 repo = 'rafamadriz/friendly-snippets'
-
-# [[plugins]]
-# repo = 'Shougo/neosnippet.vim'
-# depends = ['neosnippet-snippets', 'context_filetype.vim','ddc.vim']
-# on_event = 'InsertCharPre'
-# on_ft = 'snippet'
-# hook_source = '''
-#     imap <silent><C-k>     <Plug>(neosnippet_jump_or_expand)
-#     smap <silent><C-k>     <Plug>(neosnippet_jump_or_expand)
-#     xmap <silent><C-k>     <Plug>(neosnippet_expand_target)
-#     let g:neosnippet#enable_snipmate_compatibility = 1
-#     let g:neosnippet#enable_completed_snippet = 1
-#     let g:neosnippet#expand_word_boundary = 1
-#     let g:neosnippet#snippets_directory = '~/.vim/snippets'
-#     " if has('conceal')
-#     "     set conceallevel=0
-#     " endif
-# '''
-
 
 [[plugins]]
 repo = 'Shougo/ddc-cmdline'

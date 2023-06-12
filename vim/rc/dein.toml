@@ -8,6 +8,9 @@ repo = 'Shougo/dein.vim'
 repo = 'Yggdroot/indentLine'
 
 [[plugins]]
+repo = 'vim-jp/autofmt'
+
+[[plugins]]
 repo = 'itchyny/lightline.vim'
 hook_add  = '''
     so $HOME/.vim/rc/lightline.rc.vim
@@ -164,3 +167,6 @@ depends = 'open-browser.vim'
 
 [[plugins]]
 repo = 'cespare/vim-toml'
+
+[[plugins]]
+repo = 'lambdalisue/gin.vim'

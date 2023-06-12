@@ -1,32 +1,34 @@
 [[plugins]]
+repo = 'nvim-lua/plenary.nvim'
+
+[[plugins]]
 repo = 'neovim/nvim-lspconfig'
 lua_source = '''
 
 require("vim.lsp._watchfiles")._watchfunc = require("vim._watch").watch
 
-require('lspconfig').solargraph.setup {
-    single_file_support = true,
-                        capabilities = {},
-}
+local capabilities = vim.lsp.protocol.make_client_capabilities()
+capabilities.textDocument.completion.completionItem.snippetSupport = true
 
--- local capabilities = vim.lsp.protocol.make_client_capabilities()
--- 
---     capabilities.textDocument.completion.completionItem.snippetSupport = true
+    require('lspconfig').solargraph.setup {
+        single_file_support = true,
+                            capabilities = {},
+    }
 
-    vim.lsp.handlers['textDocument/publishDiagnostics'] = vim.lsp.with(
-            vim.lsp.diagnostic.on_publish_diagnostics, {
-            update_in_insert = false,
-            virtual_text = {
-            format = function(diagnostic)
-            return string.format(
-                    '%s (%s: %s)',
-                    diagnostic.message,
-                    diagnostic.source,
-                    diagnostic.code
-                    )
-            end
-            },
-            })
+
+vim.lsp.handlers['textDocument/publishDiagnostics'] = vim.lsp.with(
+        vim.lsp.diagnostic.on_publish_diagnostics, {
+        update_in_insert = false,
+        virtual_text = {
+        format = function(diagnostic)
+        return string.format(
+                '%s (%s)',
+                diagnostic.message,
+                diagnostic.code
+                )
+        end
+        },
+        })
 '''
 
 [[plugins]]
@@ -55,5 +57,19 @@ require('mason-lspconfig').setup_handlers({ function(server_name)
 
         nvim_lsp[server_name].setup(opts)
         end
+        })
+'''
+
+[[plugins]]
+repo = 'jose-elias-alvarez/null-ls.nvim'
+depends = 'nvim-lua/plenary.nvim'
+lua_source = '''
+local null_ls = require("null-ls")
+local helpers = require("null-ls.helpers")
+
+null_ls.setup({
+        sources = { 
+        null_ls.builtins.formatting.markdownlint
+        },
         })
 '''

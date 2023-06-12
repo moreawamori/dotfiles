@@ -61,6 +61,9 @@ echo "...Installed neovim"
 echo "Install For Vim and neovim..."
 
 if [[ ! $(command -v deno) ]]; then
+    if [[ ! $(command -v unzip) ]];then
+        sudo apt install unzip
+    fi
     echo "deno"
     echo "Install Deno..."
     cd ~
