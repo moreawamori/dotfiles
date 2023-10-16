@@ -1,11 +1,6 @@
 [[plugins]]
 repo = 'vim-denops/denops.vim'
 
-# [[plugins]]
-# repo = 'Shougo/neoyank.vim'
-# on_event = 'TextYankPost'
-# on_source = ['denite.nvim']
-
 [[plugins]]
 repo = 'skanehira/translate.vim'
 
@@ -93,6 +88,17 @@ on_cmd = 'GhostStart'
 [[plugins]]
 repo = 'rcarriga/nvim-notify'
 on_lua = 'notify'
+
+[[plugins]]
+repo = 'github/copilot.vim'
+on_cmd = 'Copilot'
+hook_add = '''
+    let g:copilot_no_maps = v:true
+
+    imap <silent><expr> <C-g> copilot#Accept()
+    imap <silent><expr> <C-n> copilot#Next()
+    imap <silent><expr> <C-p> copilot#Previous() 
+'''
 
 # [[plugins]]
 # repo = 'dag/vim2hs'

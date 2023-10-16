@@ -82,11 +82,11 @@ endfunction
 hook_add = '''
 nnoremap <silent> s<Space> <Cmd>Ddu
     \ -name=files file
-    \ -source-option-path=`fnamemodify($HOME,':p:h').'/.vim/rc/'`
+    \ -source-option-file-path=`fnamemodify($HOME,':p:h').'/.vim/rc/'`
     \ <CR>
 nnoremap <silent> ss <Cmd>Ddu
     \ -name=files file
-    \ -source-option-path='.'
+    \ -source-option-file-path=`fnamemodify('.',':p:h')`
     \ <CR>
 nnoremap <silent> sus <Cmd>Ddu 
     \ -name=files file_point file_old file
@@ -162,8 +162,13 @@ on_source = 'ddu.vim'
 hook_add = '''
     nnoremap [Space]f <Cmd>Ddu
     \ -name=filer-`win_getid()` -ui=filer -resume -sync file
-    \ -source-option-path=`getcwd()`
-    \ -source-option-columns=filename<CR>
+    \ -source-option-file-path=`getcwd()`
+    \ -source-option-file-columns=filename<CR>
+
+    nnoremap [Space]cf <Cmd>Ddu
+    \ -name=filer-`win_getid()` -ui=filer -resume -sync file
+    \ -source-option-file-path=`expand('%:p:h')`
+    \ -source-option-file-columns=filename<CR>
 '''
 
 [plugins.ftplugin]

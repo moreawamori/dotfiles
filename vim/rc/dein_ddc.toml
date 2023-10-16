@@ -12,7 +12,7 @@ hook_source = '''
   call ddc#custom#patch_global('ui', 'pum')
 
   call ddc#custom#patch_global(
-      \ 'sources', ['around', 'rg', 'file']
+      \ 'sources', ['around', 'rg', 'copilot', 'file']
       \ )
 
   call ddc#custom#patch_global('sourceOptions', {
@@ -54,9 +54,23 @@ hook_source = '''
       \   'minAutoCompleteLength': 1000,
       \   'forceCompletionPattern': '\S/\S*'
       \ },
+      \ 'copilot': {
+      \   'mark': 'copilot',
+      \   'matchers': [],
+      \   'minAutoCompleteLength': 0,
+      \   'isVolatile': 'false',
+      \ },
       \ })
+
       call ddc#custom#patch_global('sourceParams', {
-              \ 'nvim-lsp': { 'kindLabels': { 'Class': 'c' } },
+              \ 'nvim-lsp': {
+              \   'kindLabels': { 'Class': 'c' },
+              \   'snippetEngine': denops#callback#register({
+              \         body -> vsnip#anonymous(body)
+              \   }),
+              \   'enableResolveItem': v:true,
+              \   'enableAdditionalTextEdit': v:true,
+              \   },
               \ })
 
   call ddc#custom#patch_global('cmdlineSources', {
@@ -70,7 +84,7 @@ hook_source = '''
 		    \ })
 
   call ddc#custom#patch_filetype(
-          \ ['ruby', 'python'],
+          \ ['ruby', 'python', 'sh', 'cs'],
           \ 'sources', has('nvim') ?
           \ ['nvim-lsp', 'vsnip','around', 'file'] :
           \ ['vsnip', 'around', 'file']
@@ -183,28 +197,32 @@ hook_add = '''
 '''
 
 [[plugins]]
+repo = 'Shougo/ddc-source-copilot'
+on_source = 'ddc.vim'
+
+[[plugins]]
 repo = 'hrsh7th/vim-vsnip'
-depends = ['vim-vsnip-integ', 'friendly-snippets']
+depends = ['ddc-source-vsnip','friendly-snippets']
 on_event = 'InsertEnter'
 on_source = 'ddc.vim'
 hook_add = '''
 " Expand
-imap <expr> <C-l> vsnip#expandable() ? '<Plug>(vsnip-expand)' : '<C-l>'
-smap <expr> <C-l> vsnip#expandable() ? '<Plug>(vsnip-expand)' : '<C-l>'
+imap <expr> <C-l> vsnip#available(1) ? '<Plug>(vsnip-expand-or-jump)' : '<C-l>'
+smap <expr> <C-l> vsnip#available(1) ? '<Plug>(vsnip-expand-or-jump)' : '<C-l>'
+
 " Jump forward or backward
-imap <expr> <Tab> vsnip#jumpable(1)  ? '<Plug>(vsnip-jump-next)' : '<Tab>'
-smap <expr> <Tab> vsnip#jumpable(1)  ? '<Plug>(vsnip-jump-next)' : '<Tab>'
+imap <expr> <TAB> vsnip#jumpable(1)  ? '<Plug>(vsnip-jump-next)' : '<Tab>'
+smap <expr> <TAB> vsnip#jumpable(1)  ? '<Plug>(vsnip-jump-next)' : '<Tab>'
 imap <expr> <S-Tab> vsnip#jumpable(-1) ? '<Plug>(vsnip-jump-prev)' : '<S-Tab>'
 smap <expr> <S-Tab> vsnip#jumpable(-1) ? '<Plug>(vsnip-jump-prev)' : '<S-Tab>'
 let g:vsnip_snippet_dir = expand('~/dotfiles/vim/snippets')
+let g:vsnip_filetypes = {}
 '''
 
 [[plugins]]
-repo = 'hrsh7th/vim-vsnip-integ'
-hook_add = '''
-    autocmd User PumCompleteDone call vsnip_integ#on_complete_done(g:pum#completed_item)
-    autocmd User PumCompleteDone * echom "現在のファイルは「" . expand('%:t') . "」です。"
-'''
+repo = 'uga-rosa/ddc-source-vsnip'
+on_source = 'ddc.vim'
+
 
 [[plugins]]
 repo = 'rafamadriz/friendly-snippets'
@@ -240,3 +258,4 @@ on_source = 'ddc.vim'
 [[plugins]]
 repo = 'Shougo/ddc-ui-pum'
 on_source = 'ddc.vim'
+
